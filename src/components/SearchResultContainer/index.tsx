@@ -9,6 +9,7 @@ import { periodToString } from '../../utils/misc';
 import { Seating } from '../../data/beans/Section';
 import { ErrorWithFields, softError } from '../../log';
 import { ScheduleContext } from '../../contexts';
+import Spinner from '../Spinner';
 
 import './stylesheet.scss';
 
@@ -16,6 +17,7 @@ type ProfessorType = {
   name: string;
   sections: SectionBean[];
   gpa: string;
+  loading: boolean;
 };
 interface CourseDetailsAPIResponse {
   header: [
@@ -41,7 +43,12 @@ interface CourseDetailsAPIResponse {
   }>;
 }
 
-const Professor = ({ name, sections, gpa }: ProfessorType): JSX.Element => {
+const Professor = ({
+  name,
+  sections,
+  gpa,
+  loading,
+}: ProfessorType): JSX.Element => {
   return (
     <>
       <tr>
@@ -149,20 +156,24 @@ const Section = ({ section }: SectionProps): JSX.Element => {
       <td>{section.meetings[0]?.days.join('')}</td>
       <td>{periodToString(section.meetings[0]?.period)}</td>
       <td>
-        {seating[0].length === 0
-          ? `Loading...`
-          : typeof seating[0][1] === 'number'
-          ? // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-            `${seating[0][1] ?? '<unknown>'}/${seating[0][0] ?? '<unknown>'}`
-          : `N/A`}
+        {seating[0].length === 0 ? (
+          <Spinner size="small" />
+        ) : typeof seating[0][1] === 'number' ? (
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          `${seating[0][1] ?? '<unknown>'}/${seating[0][0] ?? '<unknown>'}`
+        ) : (
+          `N/A`
+        )}
       </td>
       <td>
-        {seating[0].length === 0
-          ? `Loading...`
-          : typeof seating[0][1] === 'number'
-          ? // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-            `${seating[0][3] ?? '<unknown>'}/${seating[0][2] ?? '<unknown>'}`
-          : `N/A`}
+        {seating[0].length === 0 ? (
+          <Spinner size="small" />
+        ) : typeof seating[0][1] === 'number' ? (
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          `${seating[0][3] ?? '<unknown>'}/${seating[0][2] ?? '<unknown>'}`
+        ) : (
+          `N/A`
+        )}
       </td>
       <td>{section.meetings[0]?.where}</td>
     </tr>
@@ -316,6 +327,7 @@ export default function SearchResultContainer({
                     key={professor}
                     name={professor}
                     sections={instructorMap[professor] ?? []}
+                    loading={gpaMap === null}
                     gpa={
                       gpaMap === null
                         ? 'Loading...'
