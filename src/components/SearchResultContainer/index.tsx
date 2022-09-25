@@ -166,12 +166,14 @@ const Section = ({ section }: SectionProps): JSX.Element => {
         )}
       </td>
       <td>
-        {seating[0].length === 0
-          ? `Loading...`
-          : typeof seating[0][1] === 'number'
-          ? // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-            `${seating[0][3] ?? '<unknown>'}/${seating[0][2] ?? '<unknown>'}`
-          : `N/A`}
+        {seating[0].length === 0 ? (
+          <Spinner size="small" />
+        ) : typeof seating[0][1] === 'number' ? (
+          // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+          `${seating[0][3] ?? '<unknown>'}/${seating[0][2] ?? '<unknown>'}`
+        ) : (
+          `N/A`
+        )}
       </td>
       <td>{section.meetings[0]?.where}</td>
     </tr>

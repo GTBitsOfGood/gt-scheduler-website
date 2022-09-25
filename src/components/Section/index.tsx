@@ -14,6 +14,7 @@ import { DELIVERY_MODES } from '../../constants';
 import { Section as SectionBean } from '../../data/beans';
 import { Seating } from '../../data/beans/Section';
 import { ErrorWithFields, softError } from '../../log';
+import Spinner from '../Spinner';
 
 import './stylesheet.scss';
 
@@ -155,13 +156,15 @@ export default function Section({
                   <b>Seats Filled</b>
                 </td>
                 <td>
-                  {seating[0].length === 0
-                    ? `Loading...`
-                    : typeof seating[0][1] === 'number'
-                    ? `${seating[0][1] ?? '<unknown>'} of ${
-                        seating[0][0] ?? '<unknown>'
-                      }`
-                    : `N/A`}
+                  {seating[0].length === 0 ? (
+                    <Spinner size="small" />
+                  ) : typeof seating[0][1] === 'number' ? (
+                    `${seating[0][1] ?? '<unknown>'} of ${
+                      seating[0][0] ?? '<unknown>'
+                    }`
+                  ) : (
+                    `N/A`
+                  )}
                 </td>
               </tr>
               <tr>
@@ -169,13 +172,15 @@ export default function Section({
                   <b>Waitlist Filled</b>
                 </td>
                 <td>
-                  {seating[0].length === 0
-                    ? `Loading...`
-                    : typeof seating[0][1] === 'number'
-                    ? `${seating[0][3] ?? '<unknown>'} of ${
-                        seating[0][2] ?? '<unknown>'
-                      }`
-                    : `N/A`}
+                  {seating[0].length === 0 ? (
+                    <Spinner size="small" />
+                  ) : typeof seating[0][1] === 'number' ? (
+                    `${seating[0][3] ?? '<unknown>'} of ${
+                      seating[0][2] ?? '<unknown>'
+                    }`
+                  ) : (
+                    `N/A`
+                  )}
                 </td>
               </tr>
             </tbody>
